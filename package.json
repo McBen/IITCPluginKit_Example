@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "iitcpluginkit": "^1.0.1"
+  },
+  "license": "Unlicense",
+  "scripts": {
+    "build": "yarn build:dev",
+    "build:dev": "yarn ipk build:dev",
+    "build:prod": "yarn ipk build:prod",
+    "start": "yarn ipk fileserver",
+    "autobuild": "yarn ipk autobuild"
+  }
+}

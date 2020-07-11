@@ -1,0 +1,8 @@
+{
+  "name": "IITC plugin: CountPortals",
+  "id": "iitc_plugin_CountPortals",
+  "category": "Misc",
+  "description": "",
+  "author": "",
+  "entry": "src/Main.ts"
+}
