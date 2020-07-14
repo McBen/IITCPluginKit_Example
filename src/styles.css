@@ -2,3 +2,16 @@
     background-image: url("./icon.svg");
     background-size: 24px;
 }
+
+.countTable {
+    width: 100%;
+    
+    tr:nth-child(odd) td {
+        background-color: #102060;
+    }
+
+    .sep td {
+        height: 5px;
+        background-color: #ffe37f !important
+    }
+}
