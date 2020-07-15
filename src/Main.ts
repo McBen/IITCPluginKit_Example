@@ -4,6 +4,8 @@ const HACK_RANGE = 40;
 
 class CountPortals implements Plugin.Class {
 
+    private layer?: L.LayerGroup<any>;
+
     init(): void {
         console.log("CountPortals " + VERSION);
 
@@ -11,7 +13,6 @@ class CountPortals implements Plugin.Class {
 
         this.createButtons();
     }
-
 
     private createButtons(): void {
         $("#toolbox").append(
@@ -65,8 +66,34 @@ class CountPortals implements Plugin.Class {
         dialog({
             id: "pathPortals",
             title: "Portals on Path",
-            html: contents
+            html: contents,
+            closeCallback: () => this.onDialogClose()
         });
+
+        this.drawPortals(portals);
+    }
+
+    private drawPortals(portals: IITC.Portal[]): void {
+        this.layer = new L.LayerGroup();
+        window.map.addLayer(this.layer);
+
+        portals.forEach(portal => {
+            const marker = new L.CircleMarker(portal.getLatLng(), <any>{
+                color: "red",
+                stroke: true,
+                clickable: false,  /* Leaflet 0.7*/
+                interactive: false /* Leaflet 1.0+*/
+            });
+
+            this.layer!.addLayer(marker);
+        });
+    }
+
+    onDialogClose(): void {
+        if (this.layer) {
+            window.map.removeLayer(this.layer);
+            this.layer = undefined;
+        }
     }
 
     private findHackablePortals(): IITC.Portal[] {
