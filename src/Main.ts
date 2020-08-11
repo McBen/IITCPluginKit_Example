@@ -5,6 +5,7 @@ const HACK_RANGE = 40;
 class CountPortals implements Plugin.Class {
 
     private layer?: L.LayerGroup<any>;
+    private dialog?: JQuery;
 
     init(): void {
         console.log("CountPortals " + VERSION);
@@ -42,11 +43,34 @@ class CountPortals implements Plugin.Class {
             return;
         }
 
+        let contents = "<table class='countTable'></table>";
+
+        this.dialog = dialog({
+            id: "pathPortals",
+            title: "Portals on Path",
+            html: contents,
+            closeCallback: () => this.onDialogClose()
+        });
+
+
         const portals = this.findHackablePortals();
+        this.updateDialog(portals);
+        this.drawPortals(portals);
 
-        let contents = "<table class='countTable'>"
-        contents += `<tr><td>Total:</td><td>${portals.length}</td></tr>`;
+        window.addHook("pluginDrawTools", this.onDrawingChanged);
+    }
 
+    onDrawingChanged = (): void => {
+        const portals = this.findHackablePortals();
+        this.updateDialog(portals);
+        this.drawPortals(portals);
+    }
+
+    updateDialog(portals: IITC.Portal[]): void {
+        if (!this.dialog) return;
+
+
+        let contents = `<tr><td>Total:</td><td>${portals.length}</td></tr>`;
         contents += `<tr class="sep"><td colspan="2"></td></tr>`;
 
         const resPortals = portals.filter(p => p.options.team == TEAM_RES);
@@ -61,16 +85,8 @@ class CountPortals implements Plugin.Class {
             contents += `<tr><td>Level ${i}</td><td>${levelPortals.length}</td></tr>`;
         }
 
-        contents += "</table>"
-
-        dialog({
-            id: "pathPortals",
-            title: "Portals on Path",
-            html: contents,
-            closeCallback: () => this.onDialogClose()
-        });
-
-        this.drawPortals(portals);
+        const table = this.dialog.find(".countTable");
+        table.html(contents);
     }
 
     private drawPortals(portals: IITC.Portal[]): void {
@@ -97,6 +113,10 @@ class CountPortals implements Plugin.Class {
         if (this.layer) {
             window.map.removeLayer(this.layer);
             this.layer = undefined;
+
+            this.dialog = undefined;
+
+            window.removeHook("pluginDrawTools", this.onDrawingChanged);
         }
     }
 
