@@ -74,6 +74,10 @@ class CountPortals implements Plugin.Class {
     }
 
     private drawPortals(portals: IITC.Portal[]): void {
+        if (this.layer) {
+            window.map.removeLayer(this.layer);
+        }
+
         this.layer = new L.LayerGroup();
         window.map.addLayer(this.layer);
 
