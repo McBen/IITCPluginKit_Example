@@ -10,5 +10,5 @@ https://github.com/McBen/IITCPluginKit_Example/wiki
 Download: https://github.com/McBen/IITCPluginKit_Example/raw/master/dist/iitc_plugin_CountPortals.user.js
 
 #### other code examples:  
-https://github.com/McBen/IITCPluginKit_Imageoverlay
-https://github.com/McBen/IITCPluginKit_CopyGPS
+- https://github.com/McBen/IITCPluginKit_Imageoverlay
+- https://github.com/McBen/IITCPluginKit_CopyGPS
