@@ -8,6 +8,12 @@
     "build:dev": "yarn ipk build:dev",
     "build:prod": "yarn ipk build:prod",
     "start": "yarn ipk fileserver",
-    "autobuild": "yarn ipk autobuild"
+    "autobuild": "yarn ipk autobuild",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
+  },
+  "devDependencies": {
+    "vitepress": "^2.0.0-alpha.12"
   }
 }
