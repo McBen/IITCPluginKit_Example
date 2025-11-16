@@ -41,7 +41,7 @@ export default defineConfig({
             {icon: 'github', link: 'https://github.com/McBen/IITCPluginKit'}
         ],
         editLink: {
-            pattern: 'https://github.com/McBen/IITCPluginKit_Example/edit/main/docs/:path',
+            pattern: 'https://github.com/McBen/IITCPluginKit_Example/edit/master/docs/:path',
             text: 'Edit this page on GitHub'
         },
         externalLinkIcon: true
