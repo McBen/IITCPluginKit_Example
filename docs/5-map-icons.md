@@ -4,7 +4,7 @@ Next we want to mark these portals on the map.
 
 Leaflet is the underlaying library for all the drawing stuff. All visible items are based on 'L.Layer'.
 A LayerGroup will be our container for all our things.
-```typescript
+```typescript {12,13}
 class CountPortals implements Plugin.Class {
 
     private layer: L.LayerGroup<any>;
@@ -19,14 +19,15 @@ class CountPortals implements Plugin.Class {
         this.layer = new L.LayerGroup();
         window.addLayerGroup("Portals on path", this.layer, true);
     }
+}
 ```
 
 By calling "window.addLayerGroup" we transfer the visibility control of our layer container to the IITC Layer Control (the top right layer-chooser)
 
 Now draw circles around our portals.
-```typescript
-function doCount() {
-
+```typescript {11,14-25}
+doCount(): void {
+    
     // ...
     
    dialog({
@@ -56,7 +57,7 @@ A  CircleMarker is a quick an easy solution. If you prefer some more unique you 
 
 Showing them all the time is a little bit annoying. We'll bind their visibility to the dialog.
 
-```typescript
+```typescript {3}
 class CountPortals implements Plugin.Class {
 
     private layer?: L.LayerGroup<any>;
@@ -68,12 +69,13 @@ class CountPortals implements Plugin.Class {
 
         this.createButtons();
     }
-
-    [...]
+}
 ```
-Remove the initialization and let Typescript know that the layer value can be undefined ("layer?").
-```typescript
-[...]
+Remove the initialization and let Typescript know that the layer value can be undefined (`layer?`).
+```typescript {9,16-21,31,35-40}
+doCount(): void {
+
+    // ...
 
   dialog({
         id: "pathPortals",
@@ -115,7 +117,7 @@ onDialogClose(): void {
 We removed the "addLayerGroup" to get back full control of the visibility of the layer.
 Then we directly add our container to the map and add a close-event handler to the dialog.
 
-There are two new option in "new L.CircleMarker". These will prevent click interaction. One is for the old Leaflet the other for the newer version.
+There are two new options in `new L.CircleMarker()`. These will prevent click interaction. One is for the old Leaflet the other for the newer version.
 If you want user interaction change the clickable and interactive to `true` and add a `marker.on("click", ()=> ...)` event handler.
 
-Since the current type in IITCPluginKit only covers the old Leaflet the 'interactive' will generate a compiler error. To prevent this we changed the type to the allrounder `<any>`. Long story short: You should avoid "any" if possible.
+Since the current type in IITCPluginKit only covers the old Leaflet the 'interactive' will generate a compiler error. To prevent this we changed the type to the allrounder `<any>`. Long story short: You should avoid `any` if possible.

@@ -2,7 +2,7 @@
 
 A simple `alert` dialog is fine for a quick message. If we want to provide better user experience we should use a better approach: a real dialog
 
-```typescript
+```typescript {10-29}
 doCount(): void {
 
     if (!window.plugin.drawTools) {
@@ -91,7 +91,8 @@ Because we gave it an ID IITC will make sure that only one of our dialog is open
 
 The table itself looks really boring. Let's add some CSS styling:
 
-```typescript
+:::code-group
+```typescript {1,4,11} [Main.ts]
 let contents = "<table class='countTable'>"
 contents += `<tr><td>Total:</td><td>${portals.length}</td></tr>`;
 
@@ -111,9 +112,10 @@ for (let i = 8; i > 0; i--) {
 
 contents += "</table>"
 ```
+:::
 
-```css
-/* styles.css */
+:::code-group
+```css [styles.css]
 .countTable {
     width: 100%;
     
@@ -127,8 +129,9 @@ contents += "</table>"
     }
 }
 ```
+:::
 
-The CSS file we use here are processed by [postCSS](https://postcss.org/). This allows us to add some more elegant handling in our CSS like nested rules.
+The CSS file we use here is processed by [postCSS](https://postcss.org/). This allows us to add some more elegant handling in our CSS like nested rules.
 VS-code won't know that our CSS uses the postCSS format. For better syntax highlighting install a postCSS extension (like: postcss-sugarss-language) and switch file type from css to postcss in the lower right corner of the editor.
 
 What we did here:

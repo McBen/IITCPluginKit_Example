@@ -1,6 +1,6 @@
 # 3. The Calculation
 
-Lets fill the plugin with the real magic.
+Let's fill the plugin with the real magic.
 I prefer to solve things top-down. So we start with the expected result:
 ```typescript
 doCount(): void {
@@ -45,7 +45,7 @@ It's still incomplete but should cover most function and types you need for a pl
 
 Another step deeper: Loop through all drawed polylines.
 
-```javascript
+```typescript
 private findNearestPoint(pos: L.LatLng): L.LatLng | undefined {
 
     const drawnItems = <L.LayerGroup<any>>window.plugin.drawTools.drawnItems;
@@ -104,20 +104,18 @@ private distance2(a: L.LatLng, b: L.LatLng): number {
 ```
 
 To make things easy we assume that these geolines are straight lines. This is not correct and may lead to some error for long polylines.
-But it safes a bunch of calculation stuff and most people won't hardly ever recognize it.
+But it saves a bunch of calculation stuff and most people won't hardly ever recognize it.
 "closedPoint" calculates the point on the line a to b which is closest to x. 
 "distance2" returns the squared 2d-distance between two points.
-
 
 One last thing: lets replace the constant "40" in findHackablePortals with a more descripting word.
 
 ```typescript
 if (closestPoint && position.distanceTo(closestPoint) <= HACK_RANGE) 
 ```
-
 and place the definition at the top of the file:
 
-```typescript
+```typescript {3}
 import * as Plugin from "iitcpluginkit";
 
 const HACK_RANGE = 40;
