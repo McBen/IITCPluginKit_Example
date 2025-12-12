@@ -1,9 +1,9 @@
 # 5. Map Icons
 
-Next we want to mark these portals on the map.
+Next we'll mark the found portals visually on the map.
 
-Leaflet is the underlaying library for all the drawing stuff. All visible items are based on 'L.Layer'.
-A LayerGroup will be our container for all our things.
+Leaflet is the underlying library used by IITC; visible items are implementations of `L.Layer`. A `L.LayerGroup` will be our container for all our things.
+
 ```typescript {12,13}
 class CountPortals implements Plugin.Class {
 
@@ -22,14 +22,15 @@ class CountPortals implements Plugin.Class {
 }
 ```
 
-By calling "window.addLayerGroup" we transfer the visibility control of our layer container to the IITC Layer Control (the top right layer-chooser)
+Calling `window.addLayerGroup` hands visibility control of our container to IITC's layer control (the top-right layers menu).
 
-Now draw circles around our portals.
+Now draw circle markers around each portal:
+
 ```typescript {11,14-25}
 doCount(): void {
     
     // ...
-    
+   
    dialog({
         id: "pathPortals",
         title: "Portals on Path",
@@ -53,9 +54,9 @@ private drawPortals(portals: IITC.Portal[]): void {
 }
 ```
 
-A  CircleMarker is a quick an easy solution. If you prefer some more unique you could create a "L.Marker" and add a custom "L.Icon". But here we'll stay with circles.
+`L.CircleMarker` is a quick and lightweight way to visualize positions. If you prefer custom icons, you can use `L.Marker` with a custom `L.Icon`, but circles are sufficient for this example.
 
-Showing them all the time is a little bit annoying. We'll bind their visibility to the dialog.
+Keeping the markers visible permanently can be annoying. A common pattern is to show them while a dialog is open and remove them when it closes.
 
 ```typescript {3}
 class CountPortals implements Plugin.Class {
@@ -71,13 +72,15 @@ class CountPortals implements Plugin.Class {
     }
 }
 ```
-Remove the initialization and let Typescript know that the layer value can be undefined (`layer?`).
+
+Here we make the `layer` optional (`layer?`) so it can be undefined until needed.
+
 ```typescript {9,16-21,31,35-40}
 doCount(): void {
 
     // ...
 
-  dialog({
+    dialog({
         id: "pathPortals",
         title: "Portals on Path",
         html: contents,
@@ -114,10 +117,9 @@ onDialogClose(): void {
     }
 }
 ```
-We removed the "addLayerGroup" to get back full control of the visibility of the layer.
-Then we directly add our container to the map and add a close-event handler to the dialog.
 
-There are two new options in `new L.CircleMarker()`. These will prevent click interaction. One is for the old Leaflet the other for the newer version.
-If you want user interaction change the clickable and interactive to `true` and add a `marker.on("click", ()=> ...)` event handler.
+We removed the `addLayerGroup` usage to manage visibility ourselves. When the dialog opens we create and add the layer to the map; when the dialog closes we remove it.
 
-Since the current type in IITCPluginKit only covers the old Leaflet the 'interactive' will generate a compiler error. To prevent this we changed the type to the allrounder `<any>`. Long story short: You should avoid `any` if possible.
+The example sets both `clickable: false` (Leaflet 0.7) and `interactive: false` (Leaflet 1.0+). If you want the markers to respond to clicks, set these to `true` and attach a handler with `marker.on("click", () => { ... })`.
+
+Type definitions included with IITCPluginKit currently target older Leaflet versions, so `interactive` may trigger a TypeScript error. The example uses `<any>` to avoid that; prefer concrete types if possible and avoid `any` when you can.

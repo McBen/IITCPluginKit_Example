@@ -1,7 +1,6 @@
 # 3. The Calculation
 
-Let's fill the plugin with the real magic.
-I prefer to solve things top-down. So we start with the expected result:
+Let's implement the core functionality. We'll work top-down, starting with the expected result:
 ```typescript
 doCount(): void {
 
@@ -14,10 +13,9 @@ doCount(): void {
     alert(`Portals in Hack range: ${portals.length}`)
 }
 ```
-We check if the drawtool-plugin is installed. Then we need something that will give us a list of portals.
-And last-but-not-least print the result to the user.
+We check if the DrawTools plugin is installed, then retrieve a list of hackable portals, and finally display the result to the user.
 
-One step deeper: Loop through all portals and check if they are in range:
+One level deeper, we loop through all portals and check if they're within range:
 ```typescript
 private findHackablePortals(): IITC.Portal[] {
 
@@ -38,12 +36,10 @@ private findHackablePortals(): IITC.Portal[] {
 }
 ```
 
-window.portals is the object IITC stores all portals. IITC.Portal is a helper type defintion IITCPluginKit provides you.
-Maybe you want to take a look at all type definitions resikit included? see: ./node_modules/iitcpluginkit/src/types/iitc
-It's still incomplete but should cover most function and types you need for a plugin.
-".distanceTo" is a Leaflet function and will calculate the distance between points in meters.
+`window.portals` is where IITC stores all portal data. `IITC.Portal` is a type definition provided by IITCPluginKit. If you like you can explore all available type definitions in `./node_modules/iitcpluginkit/src/types/iitc` or most IDEs will give you a tooltip hint. 
+The `.distanceTo()` method is a Leaflet function that calculates the distance between points in meters.
 
-Another step deeper: Loop through all drawed polylines.
+Going deeper, we loop through all drawn polylines:
 
 ```typescript
 private findNearestPoint(pos: L.LatLng): L.LatLng | undefined {
@@ -73,12 +69,11 @@ private findNearestPoint(pos: L.LatLng): L.LatLng | undefined {
 }
 ```
 
-"drawnItems" is the layer DrawTools puts all it's stuff. The `<L.LayerGroup<any>>` tells Typescript what type it is.
-It's not only removing a warning. It's also helps with code completion.
-Long story short: We loop through all drawn items. Pick every item which is a GeodesicPolyline. Get all positions of the line.
-Then loop through the positions to find the nearest point on the line to the portal position
+`drawnItems` is the layer where DrawTools stores all its content. The `<L.LayerGroup<any>>` syntax tells TypeScript the variable's type, which helps with code completion and eliminates warnings.
 
-And finally some math stuff:
+In summary: we iterate through all drawn items, find those that are GeodesicPolylines, get their positions, and find the nearest point on each line to our portal position.
+
+Finally, some mathematical utilities:
 
 ```typescript
 private closedPoint(a: L.LatLng, b: L.LatLng, x: L.LatLng): L.LatLng {
@@ -103,12 +98,11 @@ private distance2(a: L.LatLng, b: L.LatLng): number {
 }
 ```
 
-To make things easy we assume that these geolines are straight lines. This is not correct and may lead to some error for long polylines.
-But it saves a bunch of calculation stuff and most people won't hardly ever recognize it.
-"closedPoint" calculates the point on the line a to b which is closest to x. 
-"distance2" returns the squared 2d-distance between two points.
+For simplicity, we treat these (Geodesic) Curved lines as straight lines. This isn't technically correct and may introduce small errors for very long polylines, but it saves computation and is imperceptible to most users.
 
-One last thing: lets replace the constant "40" in findHackablePortals with a more descripting word.
+`closedPoint()` calculates the closest point on line segment a-b to point x. `distance2()` returns the squared 2D distance between two points.
+
+Finally, let's replace the hard-coded value `40` in `findHackablePortals()` with a named constant:
 
 ```typescript
 if (closestPoint && position.distanceTo(closestPoint) <= HACK_RANGE) 
