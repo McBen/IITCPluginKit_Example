@@ -2,11 +2,11 @@
 This is a tutorial project for https://github.com/McBen/IITCPluginKit
 
 ## Tutorial: 
-https://McBen.github.com/IITCPluginKit_Example
+https://McBen.github.io/IITCPluginKit_Example
 
 ## Example Plugin 
 ### Count Portals on Path:
-![example](https://github.com/McBen/IITCPluginKit_Example/blob/master/images/final.png)  
+![example](https://mcben.github.io/IITCPluginKit_Example/images/final.png)  
 Download: https://github.com/McBen/IITCPluginKit_Example/raw/master/dist/iitc_plugin_CountPortals.user.js
 
 #### Other code examples:  
