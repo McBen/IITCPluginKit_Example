@@ -4,7 +4,8 @@ Expect the unexpected: the function `init()` is called on startup.
 So put there all the stuff you want to run on start.
 
 ## Toolbutton
-Having the alert text popping up on every start is really annoying. Let's hide it behind a toolbox button - a link below the portal-detail view. Where most plugins will add a link:
+
+Showing the alert on every startup is annoying. Instead, let's hide it behind a toolbox button—a link below the portal detail view:
 
 :::code-group
 ```typescript {7-12,15-17} [src/Main.ts]
@@ -29,19 +30,19 @@ class CountPortals implements Plugin.Class {
 ```
 :::
 
-The `$` is JQuery. JQuery is a good old google framework helping us doing html stuff. Modern developers will tell you not to use it. And yes, they are right and wrong. Anyway, it's already included in IITC so let's make use of it to ease HTML creations. 
+The `$` symbol represents jQuery, a popular library for HTML manipulation. While modern developers often prefer alternatives, jQuery is already included in IITC, so we use it here to simplify HTML creation.
 
-Here we create an `<a>` tag and add a "click" handler. This will call our new function which will hold our old `alert`.
+This code creates an `<a>` tag with a click handler that calls our new `doCount()` function.
 
 ![Hello world!](/images/tut-2.png)
 
 ## Toolbar Button
-Some people prefer a quick access button on the left side of the map. Please think twice before adding it. Only use it for stuff that a user will use daily.
-But hey, this is a tutorial: let's do it
 
-- First we need an icon. Download and place it in your /src/ directory -> ...
-Here we use SVG because it's simple and small, but you're free to use any web-format you like.
-- Import it at the top of your Main.ts:
+Some users prefer a quick access button on the left side of the map. Use this sparingly—only for features that users will access daily. For this tutorial, let's add one:
+
+1. First, create an icon. Download an icon and place it in your `/src/` directory. We'll use SVG for simplicity and small file size, but any web format works.
+
+2. Import it at the top of `Main.ts`:
 
 ```typescript {3}
 import * as Plugin from "iitcpluginkit";
@@ -53,7 +54,7 @@ class CountPortals implements Plugin.Class {
 }
 ```
 
-- Then create the toolbar button.
+3. Then create the toolbar button:
 
 ```typescript {14-24}
 class CountPortals implements Plugin.Class {
@@ -84,14 +85,13 @@ class CountPortals implements Plugin.Class {
 }
 ```
 
-We created a `<div>` for a new toolbar group and a `<a>` for a button with the image. 
-Finally attached them to the global map container.
+This code creates a toolbar group `<div>` and a button `<a>` with your icon, then attaches them to the map container.
 
-Make sure your "autobuild" command is still running. Open _**localhost:8100**_, update your script and reload iitc.
-As you see you'll need these often. It's a good thing to keep localhost and iitc open in different tabs.
+Ensure your "autobuild" command is still running. Navigate to [http://localhost:8100](http://localhost:8100), update your script, and reload IITC. It's helpful to keep localhost and IITC open in separate tabs.
 
 ## CSS
-Let's keep our code clean and move the styles into another file. We already have one which is still empty: `styles.css`
+
+Let's keep our code clean by moving styles into the CSS file. You already have `styles.css`—let's use it:
 
 :::code-group
 ```css [styles.css]
@@ -114,8 +114,7 @@ const toolbarGroup = $("<div>", { class: "leaflet-bar leaflet-control" })
 ```
 :::
 
-You will see an error message in your terminal window because the icon import is no longer required in `Main.ts`.
-So remove this import line.
+You'll see an error message in your terminal because the icon import is no longer needed in `Main.ts`. Remove this import line:
 
 :::code-group
 ```typescript [Main.ts]
@@ -131,7 +130,7 @@ class CountPortals implements Plugin.Class {
 
 ## Refactoring
 
-Last but not least let's do a little cleanup and move our stuff to an extra function to keep the `init()` function easy to read:
+Let's clean up the code and move button creation to a separate function to keep `init()` easy to read:
 
 :::code-group
 ```typescript {7,10-28} [Main.ts]
@@ -167,5 +166,4 @@ class CountPortals implements Plugin.Class {
 ```
 :::
 
-The `private` will let the compiler know no one else will use this function. You can mark most of your functions private.
-It won't help in final javascript but will help you track down obsolete functions. 
+The `private` keyword tells the compiler that this function is only used internally. Mark most of your functions as `private`—it won't affect the final JavaScript but helps identify unused code. 

@@ -1,10 +1,10 @@
 # 7. Release
 
-The final step when creating an addon is publishing it to other people.
+The final step in creating an add-on is publishing it so others can install and use it.
 
 ## Versioning
 
-You can manually set a version number in plugin.json:
+You can set a version number manually in `plugin.json`:
 
 ::: code-group
 ```json{4} [plugin.json]
@@ -20,33 +20,23 @@ You can manually set a version number in plugin.json:
 ```
 :::
 
-A better way is using GIT TAGs. Remove the 'version' line and create a TAG like `v1.0`
+A better approach is to use Git tags. Omit the `version` field from `plugin.json` and create a Git tag such as `v1.0` for releases.
 
-Q: "What is GIT?" 
-
-A: It's a source code management system. If you don't know it you can skip it.
-If you're a developer or want to become one: grab a tutorial.
-I highly recommend using it, but it is not required.
+If you are new to Git, it's a version control system worth learning—especially if you plan to publish and maintain code—but it's not strictly required for releasing a plugin.
 
 ## Building
 
-`yarn build:prod` creates a release version for end-users.  
-A release version will strip off some stuff and adds some optimizations.
+Running `yarn build:prod` creates a production-ready build for end users. The build process applies optimizations and strips development-only code.
 
-If you like to minimize your code add a `minimize: true` to your `plugin.json` config file.  
-This will reduce the size and remove debug stuff like console.log. But it makes it hard to read and review your code without access to your sources.  
-The benefit of a minimized vs. a normal version is not a big deal. IITC is still a project that live of open and shared code.
+If you want to further reduce the output size, add `"minimize": true` to your `plugin.json`. This removes debug statements (for example, `console.log`) and minifies the code, which makes it harder to inspect without the original sources. For most plugins, minimizing offers only modest benefits—IITC values open, reviewable code.
 
-After the script has finished, you'll find the files in your `/dist` folder.  
-A `myplugin.user.js` with the code and a `myplugin.meta.js` which is used for version checking.
+When the build completes, the generated files appear in the `dist/` folder: a `myplugin.user.js` containing the compiled plugin and a `myplugin.meta.js` used for update/version checking.
 
 ### GitHub action
 
-If you want to automate things, you could add a [GitHub action](https://github.com/features/actions), so every time you push a tag that starts with a `v`, you will create
-a production build, a new release on GitHub, and then add the created `user.js` script to your release so fellow agents can download it.  
-Automagically ;)
+You can automate releases with a GitHub Action: when you push a tag that starts with `v`, the workflow can build a production release, create a GitHub Release, and upload the generated `user.js` and other assets automatically.
 
-Here is an example:
+Here is an example workflow:
 
 ::: details deploy-gh-pages.yml
 ```yaml
@@ -92,10 +82,8 @@ jobs:
 
 ## Distribute
 
-There are multiple ways how to distribute your code. And even every faction has its own distribution channels.
-One of the best methods is to create a public git repository including the /dist/ folder. 
-This way everybody can check your sources and everybody has easy access to your compiled file.
+There are several ways to distribute your plugin. A common approach is to publish a public Git repository that includes the `dist/` folder. This lets users review your source and easily download the compiled script.
 
 ----
 
-While this chapter was really short, you should grab a coffee for the next one.
+This chapter was short—take a coffee break, then continue with the next chapter.

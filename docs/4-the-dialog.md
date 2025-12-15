@@ -1,6 +1,6 @@
 # 4. The Dialog
 
-A simple `alert` dialog is fine for a quick message. If we want to provide better user experience we should use a better approach: a real dialog
+A simple `alert()` dialog works for quick messages, but a proper dialog provides a better user experience:
 
 ```typescript {10-29}
 doCount(): void {
@@ -35,18 +35,19 @@ doCount(): void {
 }
 ```
 
-We created a table with more details of the found portals.
+We've created a table displaying detailed information about the found portals.
 
-### Portal-Data - side story
-Many plugins use portal data, and so we should take a deeper look.
+### Portal Data—A Closer Look
 
-All portals are stored in the window.portals object with the GUID as key. It includes all visible portals plus some outside of your view.
+Since many plugins work with portal data, it's worth understanding the structure in detail.
 
-These portal uses the IITC.Portals format. In fact these are Leaflet markers with more data stored in `options`. And to increase confusions this has another sub-structure `data` which hold more detail information about the portal. 
+All portals are stored in the `window.portals` object, keyed by GUID. This includes visible portals plus some outside your current view.
 
-There is even another data-structure `ent` but this one we shouldn't touch. IITC has already processed this raw-data.
+These portals use the `IITC.Portal` format, which are Leaflet markers with additional data stored in `options`. There's also a nested `data` structure containing more detailed information.
 
-Without the leaflet stuff:
+There is another data structure called `ent`, but it should not be modified—IITC has already processed this raw data.
+
+Simplified structure:
 ```typescript
  interface IITC.Portal {
      options:  {
@@ -74,20 +75,18 @@ Without the leaflet stuff:
 }
 ```
 
-This is the data you'll get for all portals on the map. Portal-Detail data are handled separately.
+This is the data structure for all portals on the map.  Portal-Detail data is handled separately.
 
-Be aware that Portals in 'Link-Zoom' have no data. They not even exists. IITC creates dummy-portals at the end of links. They only contain Position, GUID and Faction. So before processing check if data is available - like check if name is present.
+Be aware that portals in 'Link-Zoom' are dummy portals created by IITC at link endpoints. They contain only position, GUID, and faction information. Always check if data is available (e.g., verify the name exists) before processing portal details.
 
 
-### Back to our dialog
-First we count portals by each faction (portal.options.team). Then count these by level 8 to 1 (portal.options.data.level).
+### Back to Our Dialog
 
-All the <> stuff is for creating a html-table stored as HTML-String in `contents`. 
+We count portals by faction using `portal.options.team`, then count them by level (8 to 1) using `portal.options.data.level`.
 
-At last, we have to create the dialog by using IITC dialog helper. It's a IITC-wrapper for JQuery Dialogs.
-This is the function you'll use a lot for your dialogs. 
+The HTML string in `contents` builds a table. Finally, we create the dialog using IITC's dialog helper, which wraps jQuery dialogs. This is a function you'll use frequently for dialogs.
 
-Because we gave it an ID IITC will make sure that only one of our dialog is open at the same time.
+By providing an ID, IITC ensures only one instance of our dialog is open at a time.
 
 The table itself looks really boring. Let's add some CSS styling:
 
@@ -131,13 +130,11 @@ contents += "</table>"
 ```
 :::
 
-The CSS file we use here is processed by [postCSS](https://postcss.org/). This allows us to add some more elegant handling in our CSS like nested rules.
-VS-code won't know that our CSS uses the postCSS format. For better syntax highlighting install a postCSS extension (like: postcss-sugarss-language) and switch file type from css to postcss in the lower right corner of the editor.
+The CSS file is processed by [PostCSS](https://postcss.org/), which allows more elegant syntax like nested rules. VS Code won't recognize PostCSS by default. For better syntax highlighting, install a PostCSS extension (such as postcss-sugarss-language) and switch the file type from CSS to PostCSS in the editor's bottom right corner.
 
 What we did here:
-- our table uses the class "countTable"
-- evey odd row uses a different background color
-- added a special row (class "sep") as a separator
+- Applied the class `countTable` to our table
+- Alternated background colors on odd rows
+- Added a separator row with the `sep` class
 
-Instead of constructing this in an HTML-String we could have use JQuery of plain 'createElement's. 
-I usually start with a quick HTML-String and then rewrite these in JQuery to ease event handling. But that's up to you.
+Instead of building the HTML as a string, you could use jQuery or `createElement()`. I typically start with quick HTML strings and refactor to jQuery for better event handling, but that's your preference.
