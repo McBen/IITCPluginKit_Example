@@ -1,9 +1,8 @@
 # 6. Hooks
 
-So far our plugin only reacts on dialog open.
-"Hooks" are the way IITC will send event messages.
+So far our plugin only reacts when the dialog is opened. "Hooks" are how IITC broadcasts event messages to plugins.
 
-Before we start we have to change the way our dialog is filled with data.
+Before we add hooks, we first change how the dialog is populated with data.
 ```typescript {4,13-24,27-49,56}
 class CountPortals implements Plugin.Class {
 
@@ -66,10 +65,10 @@ class CountPortals implements Plugin.Class {
 }
 ```
 
-We store the "dialog" handle and clear it on close. The function `updateDialog` will replace the contents of our table with a freshly generated snapshot.
+We keep a reference to the dialog so we can update or clear it when needed. The `updateDialog` method rebuilds the table contents from the latest data.
 
 
-Now let's subscribe to the message that drawTools sends:
+Next we'll subscribe to the message sent by drawTools:
 ```typescript {11,14-18,27}
 class CountPortals implements Plugin.Class {
     
@@ -103,9 +102,9 @@ class CountPortals implements Plugin.Class {
 }
 ```
 
-Wait. What's that crazy function definition? `onDrawingChanged = (): void => {`  
-Usually you'll use `addhook` like any other event handler and would use something like `window.addHook("pluginDrawTools", () => this.onDrawingChanged());`  
-This is the regular way. Our "addHook" call is done when we create the dialog. So we also have to remove it again on dialog close.
-For such a thing we need a variable were we store the function pointer. 
+You may notice the handler is defined as an arrow function assigned to a class property: `onDrawingChanged = (): void => { ... }`. Assigning the callback this way ensures it keeps the correct `this` binding and lets us pass the function directly to `addHook` as `window.addHook("pluginDrawTools", this.onDrawingChanged)`.
+(if you're familar with javascript this is just a different way of "bind")
 
-Note IITC.me: "addHook" will check if the string is a valid message string. If you created your own events or try to use other 3rd-party plugins messages, call `window.pluginCreateHook("pluginDrawTools")` before using them.
+Because we register the hook when the dialog is created, we must remove it when the dialog is closed. Storing the function reference makes it possible to call `window.removeHook("pluginDrawTools", this.onDrawingChanged)` later.
+
+Note: `addHook` validates the message name. If you define your own messages or use hooks provided by other third-party plugins, call `window.pluginCreateHook("pluginDrawTools")` before registering the hook.
