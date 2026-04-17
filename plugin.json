@@ -4,5 +4,6 @@
   "category": "Misc",
   "description": "",
   "author": "",
-  "entry": "src/Main.ts"
+  "entry": "src/Main.ts",
+  "fileversion": "1.10.0"
 }
